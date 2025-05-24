@@ -1,23 +1,21 @@
-import axios from 'axios';
+import { CohereClient } from "cohere-ai";
 
-const COHERE_API_KEY = process.env.COHERE_API_KEY;
+const cohere = new CohereClient({
+  token: process.env.COHERE_API_KEY,
+});
 
-export async function responderIA(mensagem) {
-  const response = await axios.post(
-    'https://api.cohere.ai/v1/generate',
-    {
+export async function responderIA(pergunta) {
+  try {
+    const response = await cohere.generate({
       model: "command",
-      prompt: mensagem,
-      max_tokens: 300,
-      temperature: 0.7
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${COHERE_API_KEY}`,
-        "Content-Type": "application/json"
-      }
-    }
-  );
+      prompt: pergunta,
+      maxTokens: 100,
+      temperature: 0.9,
+    });
 
-  return response.data.generations[0].text.trim();
+    return response.generations[0].text.trim();
+  } catch (error) {
+    console.error("Erro ao gerar resposta com IA:", error);
+    return "Desculpe, não consegui gerar uma resposta no momento.";
+  }
 }
