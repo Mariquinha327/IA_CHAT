@@ -43,7 +43,7 @@ export async function POST(req) {
 
     await db.collection("chats").add(doc);
 
-    return Response.json({ mensagens });
+    return Response.json({ resposta: respostaIA });
   } catch (error) {
     console.error("Erro ao processar:", error);
     return Response.json(
