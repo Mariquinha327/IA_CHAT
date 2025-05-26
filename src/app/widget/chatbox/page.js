@@ -1,17 +1,17 @@
-
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
-export default function Chatbox({ searchParams }) {
-  const clientId = searchParams.client || "default";
+export default function Chatbox() {
+  const searchParams = useSearchParams();
+  const clientId = searchParams.get("client") || "default";
 
   const [messages, setMessages] = useState([
     { autor: "ia", conteudo: "Olá! Como posso ajudar você?" },
   ]);
   const [input, setInput] = useState("");
 
-  // ✅ Função que envia mensagem e chama a API real
   const enviarMensagem = async () => {
     if (!input.trim()) return;
 
